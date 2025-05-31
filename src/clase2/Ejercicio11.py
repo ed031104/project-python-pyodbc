@@ -3,12 +3,10 @@ from tabulate import tabulate
 
 cursor = Connection().connection().cursor()
 cursor.execute("""
-                select 
-                CONCAT(Discount * 100, '%') [Decuento de detalles de pedidos] 
-                FROM    
-                    [Order Details]
-                GROUP BY
-                    Discount
+                SELECT DISTINCT ShipName
+                FROM Orders
+                JOIN Shippers ON Orders.ShipVia = Shippers.ShipperID
+                WHERE Shippers.CompanyName = 'Speedy Express';
                 """)
 
 columns = [column[0] for column in cursor.description]

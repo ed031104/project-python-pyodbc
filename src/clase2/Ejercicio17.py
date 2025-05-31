@@ -3,12 +3,12 @@ from tabulate import tabulate
 
 cursor = Connection().connection().cursor()
 cursor.execute("""
-                select 
-                CONCAT(Discount * 100, '%') [Decuento de detalles de pedidos] 
-                FROM    
-                    [Order Details]
-                GROUP BY
-                    Discount
+                SELECT * FROM Orders
+                where exists(
+                    SELECT c.CustomerID FROM Customers c
+                    WHERE c.CustomerID = Orders.CustomerID
+                    and Fax IS NOT NULL
+                )
                 """)
 
 columns = [column[0] for column in cursor.description]

@@ -3,12 +3,11 @@ from tabulate import tabulate
 
 cursor = Connection().connection().cursor()
 cursor.execute("""
-                select 
-                CONCAT(Discount * 100, '%') [Decuento de detalles de pedidos] 
-                FROM    
-                    [Order Details]
-                GROUP BY
-                    Discount
+                    SELECT * FROM Products
+                    WHERE UnitsInStock > (
+                        SELECT AVG(UnitsInStock)
+                        FROM Products
+                    )
                 """)
 
 columns = [column[0] for column in cursor.description]
